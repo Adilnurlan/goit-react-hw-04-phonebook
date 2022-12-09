@@ -23,10 +23,13 @@ export default class App extends Component {
       number,
     };
     const isExist = this.state.contacts.find(
-      cont => cont.name.toLowerCase() === contact.name.toLowerCase()
+      cont =>
+        cont.name.toLowerCase().trim() === contact.name.toLowerCase().trim()
     );
     if (isExist) {
       return alert(`${name} is already in contacts`);
+    } else if ((name === ''.trim(), number === ''.trim())) {
+      return alert('Заполните все поля');
     }
     this.setState(({ contacts }) => ({
       contacts: [contact, ...contacts],
@@ -38,7 +41,6 @@ export default class App extends Component {
       filter: evt.currentTarget.value,
     });
     this.findContact();
-    // console.log(this.findContact());
   };
 
   findContact = () => {
@@ -53,6 +55,25 @@ export default class App extends Component {
       contacts: prevState.contacts.filter(contact => contact.id !== id),
     }));
   };
+
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+    if (parsedContacts) {
+      this.setState({
+        contacts: parsedContacts,
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('didupdate');
+
+    if (this.state.contacts !== prevState.contacts) {
+      console.log('updated');
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
 
   render() {
     return (

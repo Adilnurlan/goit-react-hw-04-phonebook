@@ -28,7 +28,7 @@ export default class App extends Component {
     );
     if (isExist) {
       return alert(`${name} is already in contacts`);
-    } else if ((name === ''.trim(), number === ''.trim())) {
+    } else if ((name.trim() === '', number.trim() === '')) {
       return alert('Заполните все поля');
     }
     this.setState(({ contacts }) => ({
